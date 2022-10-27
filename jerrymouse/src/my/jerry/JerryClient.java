@@ -14,10 +14,9 @@ public class JerryClient {
 
         BufferedReader keyBoardStream = new BufferedReader(new InputStreamReader(System.in));
 
-        while(true){
-            String message = keyBoardStream.readLine();
-            out.println(message);
-            out.flush();
-        }
+        String message = keyBoardStream.readLine();
+        out.println(message);
+        out.flush();
+        socket.close();
     }
 }

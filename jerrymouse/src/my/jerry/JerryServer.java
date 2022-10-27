@@ -15,9 +15,8 @@ public class JerryServer {
 
         String str = null;
 
-        while(true){
-            str = in.readLine();
-            System.out.println("클라이언트 : " + str);
-        }
+        str = in.readLine();
+        System.out.println("클라이언트 : " + str);
+        socket.close();
     }
 }
