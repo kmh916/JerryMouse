@@ -1,22 +1,46 @@
 package my.jerry;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class JerryServer {
-    public static void main(String[] args) throws IOException {
-        Socket socket = new ServerSocket(8878).accept();
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintStream out = new PrintStream(socket.getOutputStream());
+    public static void main(String[] args){
+        Socket socket = null;
+        BufferedReader in = null;
+        BufferedWriter out = null;
+        char[] returnValue = {65,66,67}; // ABC
 
-        String str = null;
+        try {
+            socket = new ServerSocket(8878).accept();
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-        str = in.readLine();
-        System.out.println("클라이언트 : " + str);
-        socket.close();
+            String str = null;
+
+            while(true){
+                str = in.readLine();
+                if(str.equals("")){
+                    out.write(returnValue);
+                    out.flush();
+                }
+                System.out.println("클라이언트 : " + str);
+                str = null;
+            }
+
+        } catch (Exception e){
+
+        } finally {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
+
+
 }
