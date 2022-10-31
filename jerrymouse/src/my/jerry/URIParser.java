@@ -8,8 +8,7 @@ public class URIParser {
             if(arr.length != 3)
                 throw new IllegalArgumentException("line not valid");
             String uri = arr[1];
-
-            return uri.equals("/favicon.ico") ? null : uri;
+            return uri;
         } else {
             throw new IllegalArgumentException("line not contains 'GET'");
         }

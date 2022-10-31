@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JerryServer {
@@ -24,7 +23,6 @@ public class JerryServer {
 
             String line = null;
             boolean firstLine = true;
-            boolean favicon = false;
             String uri = null;
             while(true){
 
@@ -35,13 +33,19 @@ public class JerryServer {
                     firstLine = false;
                 }
 
-                favicon = (uri == null);
 
-                if(line.equals("") && !favicon){
+                if(line.equals("")){
                     System.out.println("flush");
                     List<String> headerLines = getHeader();
-                    List<String> bodyLines = converter.convertHtmlToList(uri);
-                    headerLines.add(converter.getContentLengthHeader(uri));
+                    List<String> bodyLines = null;
+                    try {
+                        bodyLines = converter.convertHtmlToList(uri);
+                        headerLines.add(converter.getContentLengthHeader(uri));
+                    } catch (FileNotFoundException e) {
+                        headerLines = get404Header();
+                        bodyLines = converter.getNotFoundPageToStringList();
+                        headerLines.add(converter.getContentLengthHeader("/NotFound.html"));
+                    }
                     headerWriter.write(out,headerLines);
                     bodyWriter.write(out,bodyLines);
                     out.flush();
@@ -66,20 +70,18 @@ public class JerryServer {
     }
 
 
-    private static List<String> convertLinesToList(BufferedReader br) throws IOException {
-        List<String> list = new ArrayList<>();
-        while(true){
-            String line = br.readLine();
-            if(line.equals("")){
-                return list;
-            }
-            list.add(line);
-        }
-    }
 
-    private static List<String> getHeader() throws IOException {
+    private static List<String> getHeader() {
         List<String> list = new ArrayList<>();
         list.add("HTTP/1.1 200 OK");
+        list.add("Content-Type: text/html; charset=utf-8");
+        list.add("Cache-Control: no-store, no-store");
+        return list;
+    }
+
+    private static List<String> get404Header() throws IOException{
+        List<String> list = new ArrayList<>();
+        list.add("HTTP/1.1 404 Not Found");
         list.add("Content-Type: text/html; charset=utf-8");
         list.add("Cache-Control: no-store, no-store");
         return list;
