@@ -4,22 +4,22 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class JerryServer {
     public static void main(String[] args){
-        Socket socket = null;
-        BufferedReader in = null;
-        BufferedWriter out = null;
         URIParser parser = new URIParser();
         HtmlConverterImpl converter = new HtmlConverterImpl();
         MessageWriter<BufferedWriter, String> headerWriter = new HttpHeaderWriter();
         MessageWriter<BufferedWriter, String> bodyWriter = new HttpBodyWriter();
 
-        try {
-            socket = new ServerSocket(8878).accept();
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        try (
+            Socket socket = new ServerSocket(8878).accept();
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        ){
+
 
             String line = null;
             boolean firstLine = true;
@@ -32,7 +32,6 @@ public class JerryServer {
                     uri = parser.parseUri(line);
                     firstLine = false;
                 }
-
 
                 if(line.equals("")){
                     System.out.println("flush");
@@ -57,14 +56,6 @@ public class JerryServer {
 
         } catch (Exception e){
             e.printStackTrace();
-        } finally {
-            try {
-                in.close();
-                out.close();
-                socket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
 
     }
@@ -79,11 +70,12 @@ public class JerryServer {
         return list;
     }
 
-    private static List<String> get404Header() throws IOException{
+    private static List<String> get404Header() {
         List<String> list = new ArrayList<>();
         list.add("HTTP/1.1 404 Not Found");
         list.add("Content-Type: text/html; charset=utf-8");
         list.add("Cache-Control: no-store, no-store");
         return list;
     }
+
 }
