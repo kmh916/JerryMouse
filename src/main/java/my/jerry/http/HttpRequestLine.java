@@ -1,6 +1,6 @@
 package my.jerry.http;
 
-public class HttpRequestLine extends HttpFirstLine{
+public class HttpRequestLine extends HttpFirstLine {
     private final HttpMethod method;
     private final String uri;
 

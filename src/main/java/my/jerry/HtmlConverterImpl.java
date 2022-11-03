@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlConverterImpl implements HtmlConverter<String>{
+public class HtmlConverterImpl implements HtmlConverter<String> {
 
     private static final String HTML_CONTEXT_PATH = "html";
 

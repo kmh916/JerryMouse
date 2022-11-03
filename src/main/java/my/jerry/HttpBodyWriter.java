@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class HttpBodyWriter implements MessageWriter<BufferedWriter,String>{
+public class HttpBodyWriter implements MessageWriter<BufferedWriter,String> {
 
     @Override
     public void write(BufferedWriter writer, List<String> lines) throws IOException {

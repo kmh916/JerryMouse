@@ -1,6 +1,6 @@
 package my.jerry.http;
 
-public class HttpStatusLine extends HttpFirstLine{
+public class HttpStatusLine extends HttpFirstLine {
     private final HttpStatus status;
 
     public HttpStatusLine(HttpStatus status) {

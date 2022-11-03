@@ -2,7 +2,7 @@ package my.jerry.http;
 
 import java.util.List;
 
-public class HttpRequestParser implements HttpMessageParser{
+public class HttpRequestParser implements HttpMessageParser {
 
     @Override
     public HttpFirstLine parseFirstLine(String line) {
